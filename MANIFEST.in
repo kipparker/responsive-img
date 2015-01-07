@@ -1,0 +1,5 @@
+include LICENSE
+include README.md
+recursive-include resizr/fixtures *
+recursive-include resizr/template_tags *
+recursive-include resizr/tests *

@@ -1,0 +1,84 @@
+## Installation
+
+Import the resize url generator into your root urls.py file
+
+    from resizer.media_urls import resizer_urls
+
+And the following line **after** all other url rules
+
+    urlpatterns += resizer_urls()
+
+And in settings.py
+
+    DEV_RESIZE_SERVER = False | True
+
+Set to True if using the Django debug server to serve media files
+
+## Server configuration
+
+Resizer relies on an upstream server that will serve files if they exist,
+falling back to the resizer app on a 404.
+
+### Sample Nginx config
+
+See the conf/ folder for sample configurations
+
+## Resizing options
+
+>  http://media-server.com/media/image-200x300.jpg
+
+Will create a thumbnail preserving aspect ratio, with a maximum width of 200
+pixels and a maximum height of 300 pixels
+
+>  http://media-server.com/media/image-200x300-crop.jpg
+
+Exactly 200x300, cropped as necessary, with crop point at centre and middle.
+
+>  http://media-server.com/media/image-200x300-crop=lm.jpg
+
+As for crop, but with a custom crop point. Accepted values are:
+
+For the first character:
+
+- l = Left
+- c = Center
+- r = Right
+
+For the second character
+
+- t = Top
+- m = Middle
+- b = Bottom
+
+>  http://media-server.com/media/image-200x300-fill=255,124,123,1.jpg
+
+Resize the image proportionally, and pastes it onto a canvas 200x300 pixels,
+with a background rgba(255,124,123,1).
+
+Will also accept three numbers for a RGB colour.
+
+Only PNG images will respect the alpha channel argument.
+
+## Admin widget
+
+AdminImageWidget in widgets.py adds a Resizer generated thumbnail to an admin
+ImageField.
+
+Import the widget
+
+    from resizer.widgets import AdminImageWidget
+
+And override it for ImageFields:
+
+    formfield_overrides = {
+        models.ImageField: {'widget': AdminImageWidget}
+    }
+
+
+## Template tags
+
+The thumb tag will generate the correct url.
+
+You will need to add 'resizer' to your installed apps to use it.
+
+    {% thumb url '200x200' 'crop=cm' %}
