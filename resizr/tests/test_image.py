@@ -1,14 +1,13 @@
 import os
 
-from PIL import Image
 from django.test import TestCase
-from django.test.utils import override_settings
 from django.conf import settings
 
 from resizr.image import ResizableImage
 
 REAL_PATH = os.path.realpath(os.path.dirname(__file__))
 TEST_IMAGE = 'stranger-than-paradise.jpg'
+
 
 class ResizerTest(TestCase):
     def test_exists(self):

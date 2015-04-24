@@ -3,6 +3,7 @@ try:
 except ImportError:
     import Image
 
+
 def is_transparent(image):
     """
     Check to see if an image is transparent.

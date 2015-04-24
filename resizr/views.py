@@ -1,15 +1,11 @@
-import logging
-
 from django.views.generic.base import View
-from django.http.response import (HttpResponse, HttpResponseBadRequest,
-                                    HttpResponseRedirect)
+from django.http.response import (HttpResponseBadRequest, HttpResponseRedirect)
 from django.views.static import serve
 from django.http import Http404
 from django.conf import settings
 
 from image import ResizableImage
 # Create your views here.
-
 
 
 class DevResizeServer(View):
@@ -21,8 +17,8 @@ class DevResizeServer(View):
 
     def get(self, *args, **kwargs):
         try:
-            response =  serve(self.request, self.kwargs['path'],
-                              settings.MEDIA_ROOT)
+            response = serve(self.request, self.kwargs['path'],
+                             settings.MEDIA_ROOT)
         except Http404:
             return ResizerView.as_view()(*args, **kwargs)
         return response
@@ -30,10 +26,9 @@ class DevResizeServer(View):
 
 class ResizerView(View):
     def get(self, *args, **kwargs):
-        response_image = None
         img = ResizableImage(self.request.path)
         try:
-            response_image = img.process()
+            img.process()
         except IOError:
             if not img.exists():
                 raise Http404

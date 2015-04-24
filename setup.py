@@ -14,7 +14,7 @@ setup(
     license='MIT License',  # example license
     description='Create resized versions of existing images using a url schema',
     long_description=README,
-    url='http://www.kipparker.co.uk/',
+    url='http://www.ostmodern.co.uk/',
     author='Kip Parker',
     author_email='kip@kipparker.co.uk',
     classifiers=[

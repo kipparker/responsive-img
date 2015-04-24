@@ -1,11 +1,12 @@
 from django import forms
 from django.utils.safestring import mark_safe
 
-from .template_tags.thumb import create_thumb_url
+from resizr.template_tags.thumb import create_thumb_url
+
 
 class AdminImageWidget(forms.FileInput):
     """
-    A ImageField Widget for admin that shows a thumbnail
+    An ImageField Widget for admin that shows a thumbnail
     """
 
     def __init__(self, attrs={}):

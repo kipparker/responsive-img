@@ -9,7 +9,8 @@ from django.conf import settings
 from StringIO import StringIO
 import requests
 
-from resizr import processors
+from . import processors
+
 
 class ResizableImage(object):
     """
@@ -37,7 +38,6 @@ class ResizableImage(object):
         else:
             return img.save(self.real_path, quality=80)
 
-
     def process(self):
         if not self.exists():
             properties = self.get_image_properties()
@@ -47,13 +47,11 @@ class ResizableImage(object):
         else:
             return None
 
-
     def get_url(self):
         if hasattr(settings, 'S3_URL'):
             return settings.S3_URL + self.url
         else:
             return self.url
-
 
     def get_image(self):
         if hasattr(settings, 'S3_URL'):
@@ -62,14 +60,13 @@ class ResizableImage(object):
             raw = ''
             for chunk in data.iter_content():
                 if chunk:
-                    raw +=chunk
+                    raw += chunk
 
             file = StringIO(raw)
             return_image = Image.open(file)
         else:
             return_image = Image.open(self.base_path())
         return return_image
-
 
     def get_existing_image(self):
         if hasattr(settings, 'S3_URL'):
@@ -78,14 +75,13 @@ class ResizableImage(object):
             raw = ''
             for chunk in data.iter_content():
                 if chunk:
-                    raw +=chunk
+                    raw += chunk
 
             file = StringIO(raw)
             return_image = Image.open(file)
         else:
             return_image = Image.open(self.base_path())
         return return_image
-
 
     def create_thumbnail(self, properties):
         original_image = self.get_image()
@@ -111,7 +107,6 @@ class ResizableImage(object):
             )
         return img
 
-
     def clean_properties(self, dict):
         """
         Convert the properties into attributes, by calculation where necessary
@@ -127,11 +122,9 @@ class ResizableImage(object):
             dict[key] = val
         return dict
 
-
     def build_expressions(self):
         basename = '(?P<basename>.*)'
         extensions = '(?P<ext>gif|jpg|jpeg|png|JPG)'
-        location = re.escape(settings.MEDIA_URL.lstrip('/'))
         width = '(?P<width>[0-9]+)'
         height = '(?P<height>[0-9]+)'
         crop = '(?P<crop>crop)'
@@ -147,16 +140,14 @@ class ResizableImage(object):
             r'%s\.%s' % (basename, extensions)
         ]
 
-
     def get_image_properties(self):
         self.properties = {}
         for r in self.matches:
             match = re.match(r, self.relative_path)
-            if match != None:
-                self.properties =  match.groupdict()
+            if match is not None:
+                self.properties = match.groupdict()
                 break
         return self.clean_properties(self.properties)
-
 
     def base_path(self):
         if self.properties:
@@ -165,7 +156,6 @@ class ResizableImage(object):
                 self.properties['ext']
             )
         return self.real_path
-
 
     def exists(self):
         if hasattr(settings, 'S3_URL'):

@@ -1,7 +1,8 @@
-from PIL import Image, ImageOps, ImageDraw, ImageChops
+from PIL import Image, ImageDraw, ImageChops
 from resizr import processors
 from unittest import TestCase
 from resizr.utils import is_transparent
+
 
 def create_image(mode='RGB', size=(800, 600)):
     image = Image.new(mode, size, (255, 255, 255))
@@ -33,6 +34,6 @@ class CropTest(TestCase):
 
     def test_fill(self):
         image = create_image()
-        filled = processors.fill(image, (100, 100), colour=(1,2,3,0))
+        filled = processors.fill(image, (100, 100), colour=(1, 2, 3, 0))
         self.assertEqual(filled.size, (100, 100))
         self.assertEqual(is_transparent(filled), True)
