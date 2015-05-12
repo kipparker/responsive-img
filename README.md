@@ -82,3 +82,10 @@ The thumb tag will generate the correct url.
 You will need to add 'resizer' to your installed apps to use it.
 
     {% thumb url '200x200' 'crop=cm' %}
+
+## Notes
+
+Responivizr
+responsive-img
+img-rsp
+img-resizr

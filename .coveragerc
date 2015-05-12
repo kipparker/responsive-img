@@ -1,0 +1,7 @@
+[run]
+source = resizr
+omit = resizr/tests/*
+branch = true
+
+[report]
+omit = resizr/tests/*

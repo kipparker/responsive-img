@@ -27,12 +27,13 @@ class DevResizeServer(View):
 class ResizerView(View):
     def get(self, *args, **kwargs):
         img = ResizableImage(self.request.path)
-        try:
-            img.process()
-        except IOError:
-            if not img.exists():
-                raise Http404
-            return HttpResponseBadRequest('Could not parse resize attributes')
+        if not img.is_resizable():
+            raise Http404("This image could not be parsed")
+        # try:
+        img.process()
+        # except IOError:
+        #     if not img.exists():
+        #         raise Http404("Image does not exist")
         if img.exists():
             return HttpResponseRedirect(img.url)
         raise Http404

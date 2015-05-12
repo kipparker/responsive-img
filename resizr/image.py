@@ -1,20 +1,36 @@
 import re
-import os
+# import os
 
 from django.core.files.storage import default_storage
 
 from PIL import Image
 from django.conf import settings
 
-from StringIO import StringIO
-import requests
+# from StringIO import StringIO
+# import requests
 
 from . import processors
+
+RE_IMAGE_URL = ('(?P<basename>.*)\\-(?P<width>[0-9]+)x(?P<height>[0-9]+)'
+                '(\-(?P<operation>crop|fill))?'
+                '(=((?P<colour>\d{1,3},\d{1,3},\d{1,3}[,\d{1,3}]?)|'
+                '(?P<target>[lcr][tmb]+)))?'
+                '\\.(?P<ext>gif|jpg|jpeg|png|JPG)')
+
+"""TODO
+Allow using an additional extension to convert the image
+eg. myimage.gif.png
+Make the default image type PNG
+implement transparencies
+Test django storages
+Add testing
+
+"""
 
 
 class ResizableImage(object):
     """
-    given path, exposes methods to resize an image
+    given a path, creates an object with methods to resize the image
     """
 
     def __init__(self, path, *arg, **kwargs):
@@ -26,22 +42,22 @@ class ResizableImage(object):
             (self.url.find(settings.MEDIA_URL) + len(settings.MEDIA_URL)):
         ]
         self.real_path = '%s%s' % (settings.MEDIA_ROOT, self.relative_path)
-        self.build_expressions()
+        match = re.match(RE_IMAGE_URL, self.relative_path)
+        try:
+            self.properties = self.clean_properties(match.groupdict())
+        except AttributeError:
+            self.properties = None
 
+    def is_resizable(self):
+        return self.properties is not None
 
     def save_image(self, img):
-        if hasattr(settings, 'S3_URL'):
-            s3_key = default_storage.open(self.url, 'w')
-            img.save(s3_key, quality=80)
-            s3_key.close()
-            return True
-        else:
-            return img.save(self.real_path, quality=80)
+        f = default_storage.open(self.relative_path, 'w')
+        img.save(f, quality=80)
 
     def process(self):
         if not self.exists():
-            properties = self.get_image_properties()
-            img = self.create_thumbnail(properties)
+            img = self.create_thumbnail()
             self.save_image(img)
             return img
         else:
@@ -54,51 +70,24 @@ class ResizableImage(object):
             return self.url
 
     def get_image(self):
-        if hasattr(settings, 'S3_URL'):
-            url = '%s%s' % (settings.S3_URL, self.base_path(),)
-            data = requests.get(url, verify=False)
-            raw = ''
-            for chunk in data.iter_content():
-                if chunk:
-                    raw += chunk
+        return Image.open(default_storage.open(self.base_path(), 'r').file)
 
-            file = StringIO(raw)
-            return_image = Image.open(file)
-        else:
-            return_image = Image.open(self.base_path())
-        return return_image
-
-    def get_existing_image(self):
-        if hasattr(settings, 'S3_URL'):
-            url = '%s%s' % (settings.S3_URL, self.url,)
-            data = requests.get(url, verify=False)
-            raw = ''
-            for chunk in data.iter_content():
-                if chunk:
-                    raw += chunk
-
-            file = StringIO(raw)
-            return_image = Image.open(file)
-        else:
-            return_image = Image.open(self.base_path())
-        return return_image
-
-    def create_thumbnail(self, properties):
+    def create_thumbnail(self):
         original_image = self.get_image()
-        size = (properties['width'], properties['height'])
-        if 'crop' in properties:
+        size = (self.properties['width'], self.properties['height'])
+        if self.properties['operation'] == 'crop':
             img = processors.scale_and_crop(
                 original_image,
                 size,
                 crop=True,
-                target=properties.get('target'),
+                target=self.properties['target'],
             )
 
-        elif 'fill' in properties:
+        elif self.properties['operation'] == 'fill':
             img = processors.fill(
                 original_image,
                 size,
-                properties.get('colour')
+                self.properties['colour']
             )
         else:
             img = processors.scale_and_crop(
@@ -113,52 +102,21 @@ class ResizableImage(object):
         """
         self.crop = False
         for key, val in dict.items():
-            if key in ('width', 'height'):
+            if key in ('width', 'height') and val is not None:
                 val = int(dict[key])
-            if key == 'crop' or key == 'fill':
+            if key == 'crop' or key == 'fill' and val is not None:
                 val = True
-            if key == 'colour':
+            if key == 'colour' and val is not None:
                 val = tuple([int(i) for i in val.split(',')])
             dict[key] = val
         return dict
 
-    def build_expressions(self):
-        basename = '(?P<basename>.*)'
-        extensions = '(?P<ext>gif|jpg|jpeg|png|JPG)'
-        width = '(?P<width>[0-9]+)'
-        height = '(?P<height>[0-9]+)'
-        crop = '(?P<crop>crop)'
-        fill = '(?P<fill>fill)=(?P<colour>\d{1,3},\d{1,3},\d{1,3}[,\d{1,3}]?)'
-        target = '(?P<target>[lcr][tmb]+)'
-
-        self.matches = [
-            r'%s\-%sx%s-%s\.%s' % (basename, width, height, fill, extensions),
-            r'%s\-%sx%s-%s\=%s\.%s' % (basename, width, height, crop,
-                                       target, extensions),
-            r'%s\-%sx%s-%s\.%s' % (basename, width, height, crop, extensions),
-            r'%s\-%sx%s\.%s' % (basename, width, height, extensions),
-            r'%s\.%s' % (basename, extensions)
-        ]
-
-    def get_image_properties(self):
-        self.properties = {}
-        for r in self.matches:
-            match = re.match(r, self.relative_path)
-            if match is not None:
-                self.properties = match.groupdict()
-                break
-        return self.clean_properties(self.properties)
-
     def base_path(self):
-        if self.properties:
-            return '%s%s.%s' % (
-                settings.MEDIA_ROOT, self.properties['basename'],
-                self.properties['ext']
+        if hasattr(self, 'properties'):
+            return '%s.%s' % (
+                self.properties['basename'], self.properties['ext']
             )
         return self.real_path
 
     def exists(self):
-        if hasattr(settings, 'S3_URL'):
-            return default_storage.exists(self.url)
-        else:
-            return os.path.exists(self.real_path)
+        return default_storage.exists(self.relative_path)
