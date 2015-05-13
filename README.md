@@ -1,4 +1,17 @@
+## Introduction
+
+responsive-img allows an image to be resized, cropped, or have a background fill
+added by adding optional parameters to the basename of an image file.
+
+Django handles resizing, but issues a redirect once the image is created,
+avoiding the problems of serving images from the Django app.
+
+
 ## Installation
+
+Install the package with:
+
+    `pip install -e git+git@github.com:kipparker/responsive-img.git@master#egg=reponsive-img`
 
 Import the resize url generator into your root urls.py file
 
@@ -82,10 +95,3 @@ The thumb tag will generate the correct url.
 You will need to add 'responsive' to your installed apps to use it.
 
     {% thumb url '200x200' 'crop=cm' %}
-
-## Notes
-
-Responivizr
-responsive-img
-img-rsp
-img-responsive
