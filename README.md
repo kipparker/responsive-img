@@ -2,11 +2,11 @@
 
 Import the resize url generator into your root urls.py file
 
-    from resizer.media_urls import resizer_urls
+    from responsive.media_urls import responsive_urls
 
 And the following line **after** all other url rules
 
-    urlpatterns += resizer_urls()
+    urlpatterns += responsive_urls()
 
 And in settings.py
 
@@ -16,8 +16,8 @@ Set to True if using the Django debug server to serve media files
 
 ## Server configuration
 
-Resizer relies on an upstream server that will serve files if they exist,
-falling back to the resizer app on a 404.
+Responsive relies on an upstream server that will serve files if they exist,
+falling back to the responsive app on a 404.
 
 ### Sample Nginx config
 
@@ -61,12 +61,12 @@ Only PNG images will respect the alpha channel argument.
 
 ## Admin widget
 
-AdminImageWidget in widgets.py adds a Resizer generated thumbnail to an admin
+AdminImageWidget in widgets.py adds a Responsive generated thumbnail to an admin
 ImageField.
 
 Import the widget
 
-    from resizer.widgets import AdminImageWidget
+    from responsive.widgets import AdminImageWidget
 
 And override it for ImageFields:
 
@@ -79,7 +79,7 @@ And override it for ImageFields:
 
 The thumb tag will generate the correct url.
 
-You will need to add 'resizer' to your installed apps to use it.
+You will need to add 'responsive' to your installed apps to use it.
 
     {% thumb url '200x200' 'crop=cm' %}
 
@@ -88,4 +88,4 @@ You will need to add 'resizer' to your installed apps to use it.
 Responivizr
 responsive-img
 img-rsp
-img-resizr
+img-responsive

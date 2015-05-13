@@ -10,7 +10,7 @@ from image import ResizableImage
 
 class DevResizeServer(View):
     """
-    Proxies requests to ResizerView on 404
+    Proxies requests to ResponsiveView on 404
     Serves in place of server proxy if 404 rules when using
     the development static files server
     """
@@ -20,11 +20,11 @@ class DevResizeServer(View):
             response = serve(self.request, self.kwargs['path'],
                              settings.MEDIA_ROOT)
         except Http404:
-            return ResizerView.as_view()(*args, **kwargs)
+            return ResponsiveView.as_view()(*args, **kwargs)
         return response
 
 
-class ResizerView(View):
+class ResponsiveView(View):
     def get(self, *args, **kwargs):
         img = ResizableImage(self.request.path)
         if not img.is_resizable():

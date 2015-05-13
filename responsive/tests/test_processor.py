@@ -1,7 +1,7 @@
 from PIL import Image, ImageDraw, ImageChops
-from resizr import processors
+from responsive import processors
 from unittest import TestCase
-from resizr.utils import is_transparent
+from responsive.utils import is_transparent
 
 
 def create_image(mode='RGB', size=(800, 600)):

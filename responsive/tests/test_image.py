@@ -4,13 +4,18 @@ from django.test import TestCase
 from django.conf import settings
 from django.test.utils import override_settings
 
-from resizr.image import ResizableImage
+from responsive.image import ResizableImage
 
 REAL_PATH = os.path.realpath(os.path.dirname(__file__))
 TEST_IMAGE = 'stranger-than-paradise.jpg'
 
 
-class ResizerTest(TestCase):
+class ResizeTest(TestCase):
+
+    def tearDown(self):
+        for f in os.listdir(settings.MEDIA_ROOT):
+            if f != TEST_IMAGE:
+                os.remove(os.path.join(settings.MEDIA_ROOT, f))
 
     def test_exists(self):
         img = ResizableImage(os.path.join(settings.MEDIA_ROOT, TEST_IMAGE))
@@ -30,10 +35,10 @@ class ResizerTest(TestCase):
         img = ResizableImage(os.path.join(settings.MEDIA_ROOT, resized))
         img.process()
         self.assertEquals(img.exists(), True)
-        # os.remove('image path')
-ResizerTest = override_settings(
+
+ResizeTest = override_settings(
     MEDIA_ROOT=os.path.join(os.path.dirname(REAL_PATH),
-                            'fixtures/media/'))(ResizerTest)
+                            'fixtures/media/'))(ResizeTest)
 
 
 class ParserTest(TestCase):
@@ -66,6 +71,6 @@ class ParserTest(TestCase):
         self.assertEquals(img.properties['operation'], 'fill')
         self.assertEquals(img.properties['colour'], (12, 201, 1))
 
-ResizerTest = override_settings(
+ParserTest = override_settings(
     MEDIA_ROOT=os.path.join(os.path.dirname(REAL_PATH),
-                            'fixtures/media/'))(ResizerTest)
+                            'fixtures/media/'))(ParserTest)

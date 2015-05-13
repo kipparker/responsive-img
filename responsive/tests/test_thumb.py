@@ -1,7 +1,7 @@
 from django.conf import settings
 
 from unittest import TestCase
-from resizr.template_tags.thumb import create_thumb_url
+from responsive.template_tags.thumb import create_thumb_url
 
 
 class ThumbTest(TestCase):

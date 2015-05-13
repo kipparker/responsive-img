@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.safestring import mark_safe
 
-from resizr.template_tags.thumb import create_thumb_url
+from responsive.template_tags.thumb import create_thumb_url
 
 
 class AdminImageWidget(forms.FileInput):

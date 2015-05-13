@@ -1,7 +1,7 @@
 [run]
-source = resizr
-omit = resizr/tests/*
+source = responsive
+omit = responsive/tests/*
 branch = true
 
 [report]
-omit = resizr/tests/*
+omit = responsive/tests/*

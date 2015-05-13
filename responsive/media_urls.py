@@ -1,10 +1,10 @@
 from django.conf import settings
 from django.conf.urls.static import static, url
 
-from .views import ResizerView, DevResizeServer
+from .views import ResponsiveView, DevResizeServer
 
 
-def resizer_urls():
+def responsive_urls():
 
     if (settings.DEBUG is True and settings.DEV_RESIZE_SERVER is True):
 
@@ -14,5 +14,5 @@ def resizer_urls():
     else:
 
         return [url(
-            r'^media/(?P<path>.*)$', ResizerView.as_view()
+            r'^media/(?P<path>.*)$', ResponsiveView.as_view()
         )]

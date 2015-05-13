@@ -46,12 +46,12 @@ def runtests(*test_args):
     try:
         from django.test.runner import DiscoverRunner
         runner_class = DiscoverRunner
-        test_args = ["resizr.tests"]
+        test_args = ["responsive.tests"]
     except ImportError:
         from django.test.simple import DjangoTestSuiteRunner
         runner_class = DjangoTestSuiteRunner
         test_args = ["tests"]
-
+    print test_args
     failures = runner_class(
         verbosity=1, interactive=True, failfast=False).run_tests(test_args)
     sys.exit(failures)
