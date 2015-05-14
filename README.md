@@ -25,7 +25,7 @@ And in settings.py
 
     DEV_RESIZE_SERVER = False | True
 
-Set to True if using the Django debug server to serve media files
+Set to True if using the Django dev server to serve media files
 
 ## Server configuration
 
