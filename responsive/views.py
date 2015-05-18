@@ -1,5 +1,5 @@
 from django.views.generic.base import View
-from django.http.response import (HttpResponseBadRequest, HttpResponseRedirect)
+from django.http.response import HttpResponseRedirect
 from django.views.static import serve
 from django.http import Http404
 from django.conf import settings

@@ -1,10 +1,8 @@
 import os
-import sys
 
 from django.test import TestCase
 from django.conf import settings
 from django.test.utils import override_settings
-from django.utils.importlib import import_module
 
 from responsive.image import ResizableImage
 
@@ -63,9 +61,7 @@ class ResizeTest(RemovesImageTest):
 
     def _make_parseable_image(self, img, options):
         return ''.join([
-            os.path.splitext(img)[0], options, os.path.splitext(img)[1]
-            ]
-        )
+            os.path.splitext(img)[0], options, os.path.splitext(img)[1]])
 
     def test_exists(self):
         img = ResizableImage(os.path.join(settings.MEDIA_ROOT, TEST_IMAGE))
