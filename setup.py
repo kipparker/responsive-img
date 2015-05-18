@@ -29,7 +29,7 @@ setup(
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     ],
     install_requires=[
-        "Django>=1.8",
+        "Django>=1.6",
         "Pillow>=2.8.1"
     ],
     test_suite="runtests.runtests",
