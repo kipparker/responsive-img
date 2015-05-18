@@ -29,11 +29,11 @@ class ResponsiveView(View):
         img = ResizableImage(self.request.path)
         if not img.is_resizable():
             raise Http404("This image could not be parsed")
-        # try:
-        img.process()
-        # except IOError:
-        #     if not img.exists():
-        #         raise Http404("Image does not exist")
+        try:
+            img.process()
+        except IOError:
+            if not img.exists():
+                raise Http404("Image does not exist")
         if img.exists():
             return HttpResponseRedirect(img.url)
         raise Http404

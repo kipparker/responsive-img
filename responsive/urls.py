@@ -1,6 +1,3 @@
-from django.conf.urls import patterns, url
-from .views import ResponsiveView
+from responsive.media_urls import responsive_urls
 
-urlpatterns = patterns(
-    '', url(r'^(?P<path>.*)$', ResponsiveView.as_view())
-)
+urlpatterns = responsive_urls()

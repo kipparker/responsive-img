@@ -59,7 +59,7 @@ def thumb(context, url, geometry, *args, **kwargs):
     """
     width, height = geometry.split('x')
 
-    crop, keep_aspect, quality = None, None, None
+    crop, fill, quality = None, None, None
     for arg in args:
         if arg.startswith('crop'):
             crop = arg

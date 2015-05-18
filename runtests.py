@@ -11,6 +11,7 @@ from django.conf import settings
 DEFAULT_SETTINGS = dict(
     DEBUG=True,
     USE_TZ=True,
+    DEV_RESIZE_SERVER=True,
     TIME_ZONE='UTC',
     DATABASES={
         "default": {
@@ -22,7 +23,7 @@ DEFAULT_SETTINGS = dict(
         "django.contrib.auth.middleware.AuthenticationMiddleware",
         "django.contrib.messages.middleware.MessageMiddleware"
     ],
-    # ROOT_URLCONF="payments.urls",
+    ROOT_URLCONF="responsive.urls",
     INSTALLED_APPS=[
         "django.contrib.auth",
         "django.contrib.contenttypes",
@@ -51,7 +52,6 @@ def runtests(*test_args):
         from django.test.simple import DjangoTestSuiteRunner
         runner_class = DjangoTestSuiteRunner
         test_args = ["tests"]
-    print test_args
     failures = runner_class(
         verbosity=1, interactive=True, failfast=False).run_tests(test_args)
     sys.exit(failures)
