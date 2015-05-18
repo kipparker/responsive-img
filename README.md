@@ -1,3 +1,4 @@
+![Travis build passing](https://travis-ci.org/kipparker/responsive-img.svg?branch=develop)
 [![Coverage Status](https://coveralls.io/repos/kipparker/responsive-img/badge.svg?branch=develop)](https://coveralls.io/r/kipparker/responsive-img?branch=develop)
 
 
