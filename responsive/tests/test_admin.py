@@ -11,7 +11,7 @@ class WidgetTest(TestCase):
     def test_widget(self):
         test_widget = AdminImageWidget()
         img = FakeImage()
-        self.assertIn(
-            '/an-image-50x50-fill=255,255,255.png',
+        self.assertTrue(
+            '/an-image-50x50-fill=255,255,255.png' in
             test_widget.render(name='image', value=img),
         )
