@@ -15,7 +15,7 @@ avoiding the problems of serving images from the Django app.
 
 Install the package with:
 
-    `pip install -e git+git@github.com:kipparker/responsive-img.git@master#egg=reponsive-img`
+    pip install -e git+git@github.com:kipparker/responsive-img.git@master#egg=reponsive-img
 
 Import the resize url generator into your root urls.py file
 
