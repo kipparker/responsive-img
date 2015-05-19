@@ -104,8 +104,6 @@ class ResizableImage(object):
         for key, val in dict.items():
             if key in ('width', 'height') and val is not None:
                 val = int(dict[key])
-            if key == 'crop' or key == 'fill' and val is not None:
-                val = True
             if key == 'colour' and val is not None:
                 val = tuple([int(i) for i in val.split(',')])
             dict[key] = val
