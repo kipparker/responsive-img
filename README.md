@@ -1,3 +1,5 @@
+![Travis build passing](https://travis-ci.org/kipparker/responsive-img.svg?branch=develop)
+
 ## Introduction
 
 responsive-img allows an image to be resized, cropped, or have a background fill
