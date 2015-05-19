@@ -8,7 +8,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='responsive-img',
-    version='0.1',
+    version='0.9',
     packages=['responsive'],
     include_package_data=True,
     license='MIT License',  # example license
