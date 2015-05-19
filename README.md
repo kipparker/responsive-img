@@ -1,5 +1,5 @@
 ![Travis build passing](https://travis-ci.org/kipparker/responsive-img.svg?branch=develop)
-[![Coverage Status](https://coveralls.io/repos/kipparker/responsive-img/badge.svg?branch=develop)](https://coveralls.io/r/kipparker/responsive-img?branch=develop)
+[![Coverage Status](https://coveralls.io/repos/kipparker/responsive-img/badge.svg?branch=master)](https://coveralls.io/r/kipparker/responsive-img?branch=master)
 
 ## Introduction
 
@@ -14,7 +14,7 @@ avoiding the problems of serving images from the Django app.
 
 Install the package with:
 
-    `pip install -e git+git@github.com:kipparker/responsive-img.git@master#egg=reponsive-img`
+    pip install -e git+git@github.com:kipparker/responsive-img.git@master#egg=reponsive-img
 
 Import the resize url generator into your root urls.py file
 
